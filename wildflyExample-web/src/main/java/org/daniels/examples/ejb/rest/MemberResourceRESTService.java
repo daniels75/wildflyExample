@@ -43,6 +43,8 @@ import javax.ws.rs.core.Response;
 import org.daniels.examples.ejb.data.MemberRepository;
 import org.daniels.examples.ejb.model.Member;
 import org.daniels.examples.ejb.service.MemberRegistration;
+import org.daniels.examples.ejb.services.Foo;
+import org.daniels.examples.ejb.services.impl.FooImpl;
 
 /**
  * JAX-RS Example
@@ -63,10 +65,39 @@ public class MemberResourceRESTService {
 
     @Inject
     MemberRegistration registration;
-
+    
+    @Inject
+    private FooImpl fooImpl1;
+    
+    @Inject
+    private FooImpl fooImpl2;
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Member> listAllMembers() {
+
+    	log.info(">>>> fooImpl1 - getA " + fooImpl1.getA());
+    	log.info(">>>> fooImpl2 - getA " + fooImpl2.getA());
+    	
+    	fooImpl1.incrementA();
+    	
+    	log.info(">>>> fooImpl1 - getA " + fooImpl1.getA());
+    	log.info(">>>> fooImpl2 - getA " + fooImpl2.getA());
+    	
+    	fooImpl2.incrementA();
+    	
+    	log.info(">>>> fooImpl1 - getA " + fooImpl1.getA());
+    	log.info(">>>> fooImpl2 - getA " + fooImpl2.getA());
+    	
+    	/* from logs
+22:52:28,361 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl1 - getA 1
+22:52:28,363 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl2 - getA 1
+22:52:28,364 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl1 - getA 2
+22:52:28,369 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl2 - getA 2
+22:52:28,371 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl1 - getA 3
+22:52:28,372 INFO  [org.daniels.examples.ejb.rest.MemberResourceRESTService] (default task-4) >>>> fooImpl2 - getA 3
+    	 * 
+    	 */
         return repository.findAllOrderedByName();
     }
 
